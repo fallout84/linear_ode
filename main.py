@@ -110,7 +110,17 @@ class Jacobi(LinearSolver):
                 return True
             y += r * fix / tau
         return False
-
+class Chebyshev(ODE):
+    def __init__(self, n: int):
+        if n % 2 != 0:
+            bc = BoundaryCondition(-1, -1, 0, 1)
+        else:
+            bc = BoundaryCondition(1, -1, 0, 1)
+        super().__init__(
+            p=lambda x: -x/(1-x**2),
+            q=lambda x: n**2/(1-x**2),
+            f=lambda x: 0,
+            bc=bc)
 
 class Legandre(ODE):  # kt;fylh
     def __init__(self, n: int):
@@ -126,24 +136,28 @@ class Legandre(ODE):  # kt;fylh
             bc=bc)
 
 # решение
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
 
+for bmn in range(5):
+    tak1 = Legandre(bmn)
+    A1, b1 = tak1.generate_system(100)
+    solver1 = Progonka()
+    solver1.solve(A1, b1)
+    y_1 = solver1.get_solution()
+    x_1 = tak1.x_grid
+    ax1.plot(x_1, y_1, lw=1.2, label=f"n = {bmn}", zorder=3)
 
-plt.figure(figsize=(8, 6))
-plt.grid(alpha=0.5)
-for bnm in range(5):
-    tak1 = Legandre(bnm)
-    A1, b1 = tak1.generate_system(50)
-    tak2 = Progonka()
-    t = tak2.solve(A1, b1)
-    y_res = tak2.get_solution()
-    x_res = tak1.x_grid
-    plt.plot(x_res, y_res, lw=0.67, ms=0, label=f"Analytical solution {bnm} ", zorder=3)
+    tak2 = Chebyshev(bmn)
+    A2, b2 = tak2.generate_system(100)
+    solver2 = Progonka()
+    solver2.solve(A2, b2)
+    y_2 = solver2.get_solution()
+    x_2 = tak2.x_grid
+    ax2.plot(x_2, y_2, lw=1.2, label=f"n = {bmn}", zorder=3)
 
-
-plt.xlabel('x', fontsize=14)
-plt.ylabel('f(x)', fontsize=14)
-plt.xticks(fontsize=12)
-plt.yticks(fontsize=12)
-
-plt.legend(fontsize=14)
+ax1.grid(alpha=0.5)
+ax1.legend(fontsize=10)
+ax2.grid(alpha=0.5)
+ax2.legend(fontsize=10)
+plt.tight_layout()
 plt.show()
