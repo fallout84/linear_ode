@@ -1,3 +1,7 @@
+import numpy as np
+from solver.Linear_solver import LinearSolver
+
+
 class Jacobi(LinearSolver):
     def __init__(self, f: float = 0.01, tol: float = 1e-5, max_iter: int = 1000000):
         super().__init__(tol, max_iter)
