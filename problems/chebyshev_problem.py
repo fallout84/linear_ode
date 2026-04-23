@@ -1,3 +1,7 @@
+from problems.boundary_conditions import BoundaryCondition
+from problems.lin_generator import ODE
+
+
 class Chebyshev(ODE):
     def __init__(self, n: int):
         if n % 2 != 0:
