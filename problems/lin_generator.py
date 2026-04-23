@@ -1,3 +1,6 @@
+import numpy as np
+from typing import Callable
+from problems.boundary_conditions import BoundaryCondition
 
 
 class ODE:
