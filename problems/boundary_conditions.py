@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+
+
 @dataclass
 class BoundaryCondition:
     # -1 - дирихле, 1 - нейман
