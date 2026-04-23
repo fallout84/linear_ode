@@ -1,3 +1,7 @@
+from solver.Linear_solver import LinearSolver
+import numpy as np
+
+
 class Progonka(LinearSolver):
     def solve(self, a_matrix: np.ndarray, b: np.ndarray) -> bool:
         n = len(b)
