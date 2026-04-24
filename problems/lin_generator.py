@@ -1,7 +1,15 @@
 import numpy as np
 from typing import Callable
-from problems.boundary_conditions import BoundaryCondition
+from dataclasses import dataclass
 
+
+@dataclass
+class BoundaryCondition:
+    # -1 - дирихле, 1 - нейман
+    left_type: int = 0.0
+    right_type: int = 0.0
+    left_val: float = 0.0
+    right_val: float = 0.0
 
 class ODE:
     def __init__(self, p: Callable, q: Callable, f: Callable, bc: BoundaryCondition) -> None:
@@ -47,3 +55,26 @@ class ODE:
                 a_matrix[i, i + 1] = w_next
 
         return a_matrix, b
+class Chebyshev(ODE):
+    def __init__(self, n: int):
+        if n % 2 != 0:
+            bc = BoundaryCondition(-1, -1, 0, 1)
+        else:
+            bc = BoundaryCondition(1, -1, 0, 1)
+        super().__init__(
+            p=lambda x: -x/(1-x**2),
+            q=lambda x: n**2/(1-x**2),
+            f=lambda x: 0,
+            bc=bc)
+class Legandre(ODE):  
+    def __init__(self, n: int):
+        if n % 2 == 1:
+            bc = BoundaryCondition(left_type=-1, right_type=-1, left_val=0, right_val=1)
+        else:
+            bc = BoundaryCondition(left_type=1, right_type=-1, left_val=0, right_val=1)
+
+        super().__init__(
+            p=lambda x: -2 * x / (1 - x ** 2),
+            q=lambda x: n * (n + 1) / (1 - x ** 2),
+            f=lambda x: 0,
+            bc=bc)
