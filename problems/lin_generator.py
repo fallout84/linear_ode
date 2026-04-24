@@ -11,6 +11,7 @@ class BoundaryCondition:
     left_val: float = 0.0
     right_val: float = 0.0
 
+
 class ODE:
     def __init__(self, p: Callable, q: Callable, f: Callable, bc: BoundaryCondition) -> None:
         self.p = p
@@ -55,6 +56,8 @@ class ODE:
                 a_matrix[i, i + 1] = w_next
 
         return a_matrix, b
+
+
 class Chebyshev(ODE):
     def __init__(self, n: int):
         if n % 2 != 0:
@@ -66,6 +69,8 @@ class Chebyshev(ODE):
             q=lambda x: n**2/(1-x**2),
             f=lambda x: 0,
             bc=bc)
+
+
 class Legandre(ODE):  
     def __init__(self, n: int):
         if n % 2 == 1:
