@@ -67,7 +67,7 @@ class ODENewton:
             solver1.solve(a1, b1)
             y1 = solver1.get_solution()
             dy1, d2y1 = self.proizvodnya(y1, h)
-            r = np.max(np.abs(d2y1 - self.f1(self.x_grid, y1, dy1)))
+            r = np.mean(np.abs(d2y1 - self.f1(self.x_grid, y1, dy1)))
             self.err.append(r)
             if r > 10000:
                 print("не сошлось")
