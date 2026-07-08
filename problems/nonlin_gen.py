@@ -1,7 +1,7 @@
 from problems.lin_generator import ODE
 from problems.lin_generator import BoundaryCondition
 import numpy as np
-from solver.Linear_solver import Progonka
+from solver.Linear import Progonka
 
 
 class ODENewton:
