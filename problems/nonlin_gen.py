@@ -14,6 +14,7 @@ class ODENewton:
         self.err = []           # архив ошибок
         self.iter_needed = 1000  # счетчик итераций
         self.max_iter = 1000   # макс кол-во итераций  def solve
+        self.gamma = 1e-5       # точность подбора решения
 
     def set_linearisation_point(self, y: np.ndarray, dy: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         df_dy = (self.f1(self.x_grid, y + self.delta, dy)
@@ -49,7 +50,7 @@ class ODENewton:
         self.err = []
         h = 1 / n
         self.x_grid = np.array([(i + 0.5) * h for i in range(n)])
-        y = np.ones(n)
+        y = (self.bc.right_val-self.bc.left_val)*self.x_grid + self.bc.left_val
         dy, d2y = self.proizvodnya(y, h)
 
         for _ in range(self.max_iter):
@@ -71,7 +72,7 @@ class ODENewton:
             if r > 10000:
                 print("не сошлось")
                 return True
-            if r <= 1e-3:
+            if r <= self.gamma:
                 self.iter_needed = _
                 self.y0 = y1
                 return True
